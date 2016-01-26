@@ -6,7 +6,7 @@ from soccersimulator import SoccerTeam, SoccerMatch
 from soccersimulator import Vector2D, Player, SoccerTournament
 
 #DEFINITION DES CONSTANTES
-GOAL_SURFACE_WIDTH = GAME_WIDTH/11.
+GOAL_SURFACE_WIDTH = GAME_WIDTH/13.
 
 def position_ball(state):
     """Position de la balle"""
@@ -46,8 +46,12 @@ def position_goalkeeper(state, id_team, id_player):
     """Position du gardien"""
     if distance_player_ball(state, id_team, id_player) < GOAL_SURFACE_WIDTH:
         return shoot_ball_team1(state, id_team, id_player)
-   # else:
-#        return SoccerAction(GAME_HEIGHT/2. - position_player(state, id_team, id_player))
-
-    return SoccerAction()
+    elif position_ball(state).y <= GAME_HEIGHT - 50 and position_ball(state).x >= GAME_WIDTH/11.:
+        return SoccerAction(Vector2D(x = 1, y = (GAME_HEIGHT/2.) - 2) -
+        position_player(state, id_team, id_player)) 
+    elif position_ball(state).y >= GAME_HEIGHT - 40 and position_ball(state).x >= GAME_WIDTH/11.:
+        return SoccerAction(Vector2D(x = 1, y = (GAME_HEIGHT/2.) + 2) -
+        position_player(state, id_team, id_player))
+    else:
+        return SoccerAction(Vector2D(x = 1, y = GAME_HEIGHT/2.) - position_player(state, id_team, id_player))
 
