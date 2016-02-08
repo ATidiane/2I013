@@ -9,12 +9,21 @@ from strategy import Mystate
 
 
 class AllStrategy(BaseStrategy):
-    def __init__(self):
-        BaseStrategy.__init__(self, "fonceur")
-    def compute_strategy(self, state, id_team, id_player):
-        #si id_team1 à la balle il shoote, sinn il cours juste vers la balle, de même pour id_team2
-        mystate = Mystate(state,id_team,id_player)
-        if id_player == 1:
-            return strategy.gardien(mystate)
-        else:
-            return strategy.fonceur_shooteur(mystate)
+    def __init__(self,comportement):
+        BaseStrategy.__init__(self,comportement.__name__)
+        self.comportement = comportement
+
+    def compute_strategy(self,state, id_team,id_player):
+        mystate = Mystate(strategy.miroir_state(state) if id_team != 1 else state,id_team,id_player)
+        res = self.comportement(mystate)
+        if id_team == 2:
+            res = strategy.miroir_socac(res)
+            
+        return res
+
+
+attaquant = AllStrategy(strategy.ball_g)
+
+defenseur  = AllStrategy(strategy.defenseur)
+
+gardien = AllStrategy(strategy.gardien)
