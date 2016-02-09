@@ -117,13 +117,29 @@ class Mystate:
             return SoccerAction((self.position_ball - self.position_player), Vector2D(x = 105, y = 10))
 
     @property
+    def defense_shoot_g(self):
+        """Shoot la balle vers la gauche avec un x qui est le centre du terrain"""
+        if self.distance_player_ball < self.rayon_player_ball:
+            return SoccerAction((self.position_ball - self.position_player), Vector2D(x = MILIEU_TERRAIN, y = GOAL_HEIGHT - 5) - self.position_ball)
+
+    @property
+    def defense_shoot_d(self):
+        if self.distance_player_ball < self.rayon_player_ball:
+            return SoccerAction((self.position_ball - self.position_player), Vector2D(x = MILIEU_TERRAIN, y = 5) - self.position_ball)
+        
+    @property
     def defense(self):
         """Defenseur"""
-        if (self.position_ball.x <= MILIEU_TERRAIN + 5):
+        if (self.position_ball.x <= MILIEU_TERRAIN - QUART_TERRAIN):
+            if (self.position_ball.y > GOAL_HEIGHT/2.):
+                return self.defense_shoot_d
+            else:
+                return self.defense_shoot_g
+        elif (self.position_ball.x <= MILIEU_TERRAIN + 5):
                 return self.shoot_ball_smart
         elif (self.position_ball - self.position_player >= 70) and (self.position_ball.x >= MILIEU_TERRAIN + 15):
             return SoccerAction(Vector2D(x = self.position_ball.x - 50, y = self.position_ball.y) - self.position_player)
-        elif (self.position_ball - self.position_player <= 20):
+        elif (self.position_ball.x - self.position_player.x <= 20):
             return self.shoot_ball
         else:
             return SoccerAction(Vector2D(x = GAME_WIDTH/6., y = GAME_HEIGHT/2.) - self.position_player)
