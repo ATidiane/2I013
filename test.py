@@ -1,10 +1,12 @@
 from soccersimulator import show
 from soccersimulator import SoccerMatch
-from team import team1, team2, team4
+from team import lalya1, lalya2, lalya4, lalya1bis
 
-match_team1 = SoccerMatch(team1, team1)
-match_team2 = SoccerMatch(team2, team2)
-match_team4 = SoccerMatch(team4, team4)
+match_lalya1 = SoccerMatch(lalya1, lalya1)
+match_lalya2 = SoccerMatch(lalya2, lalya2)
+match_lalya4 = SoccerMatch(lalya4, lalya4)
 
+
+match_lalya5 = SoccerMatch(lalya1bis, lalya1)
 if __name__ == "__main__":
-    show(match_team1)
+    show(match_lalya5)

@@ -18,11 +18,11 @@ class AllStrategy(BaseStrategy):
         res = self.comportement(mystate)
         if id_team == 2:
             res = strategy.miroir_socac(res)
-            
         return res
 
 
-attaquant = AllStrategy(strategy.ball_g)
+attaquant = AllStrategy(strategy.fonceur_shooteur)
+attaquante = AllStrategy(strategy.shooteur_ball_smart)
 
 defenseur  = AllStrategy(strategy.defenseur)
 

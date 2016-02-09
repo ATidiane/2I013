@@ -4,7 +4,8 @@ from soccersimulator.settings import *
 from soccersimulator import SoccerAction, SoccerState, Vector2D, Player
 
 #DEFINITION DES CONSTANTES
-GOAL_SURFACE_WIDTH = GAME_WIDTH/13.
+
+GOAL_SURFACE_WIDTH = GAME_WIDTH/10.
 TIERS_TERRAIN = GAME_WIDTH - 50
 MILIEU_TERRAIN = GAME_WIDTH/2.
 QUART_TERRAIN = MILIEU_TERRAIN/2.
@@ -40,6 +41,16 @@ class Mystate:
         return Vector2D(x = 0, y = GAME_HEIGHT/2.)
 
     @property
+    def goal_deux_coin_bas(self):
+        """Position du coin bas du goal1"""
+        return Vector2D(x = GAME_WIDTH, y = GAME_HEIGHT/2. + 3.5)
+
+    @property
+    def goal_deux_coin_haut(self):
+        """Position du coin haut du goal1"""
+        return Vector2D(x = GAME_WIDTH, y = GAME_HEIGHT/2. - 3.5)
+
+    @property
     def goal_deux(self):
         """Position du goal2, c'est à dire à droite"""
         return Vector2D(x = GAME_WIDTH, y = GAME_HEIGHT/2.)
@@ -68,37 +79,78 @@ class Mystate:
             return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball))
         else:
             return self.fonce_ball
-
+    
     @property
-    def defense(self):
-        """Defenseur"""
-        if (self.position_ball.x <= MILIEU_TERRAIN + 5):
-                return self.shoot_ball
-        elif (self.position_ball - self.position_player >= 70) and (self.position_ball.x >= MILIEU_TERRAIN + QUART_TERRAIN):
-            return SoccerAction(Vector2D(x = self.position_ball.x - 60, y = self.position_ball.y) - self.position_player)
+    def shoot_ball_coin_bas(self):
+        """Shoot la balle au coin bas, c'est à dire au premier poto du goal_deux"""
+        return SoccerAction((self.position_ball - self.position_player), (self.goal_deux_coin_bas - self.position_ball))
+    
+    @property
+    def shoot_ball_coin_haut(self):
+        """Shoot la balle au coin haut, c'est à dire au deuxième poto du goal_deux"""
+        return SoccerAction((self.position_ball - self.position_player), (self.goal_deux_coin_haut - self.position_ball))
+    
+    @property
+    def shoot_ball_smart(self):
+        """Choisi quand shooter au premier ou au deuxième poto ou encore au milieu du goal"""
+        if self.distance_player_ball < self.rayon_player_ball:
+            if (self.position_ball.y <= GAME_HEIGHT - 46) and (self.position_ball.x >= MILIEU_TERRAIN - 5):
+                return self.shoot_ball_coin_bas
+            elif (self.position_ball >= GAME_HEIGHT - 44) and (self.position_ball.x >= MILIEU_TERRAIN - 5):
+                return self.shoot_ball_coin_haut
+            else:
+                return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball))
         else:
-            return SoccerAction(Vector2D(x = GAME_WIDTH/6., y = GAME_HEIGHT/2.) - self.position_player)
-            
-        
+            return self.fonce_ball
 
     @property
     def shoot_ball_g(self):
         """Shoot la balle vers la gauche avec un angle de 45 dégré"""
         if self.distance_player_ball < self.rayon_player_ball:
-            return SoccerAction((self.position_ball - self.position_player), (Vector2D(x = 105, y = 80) - self.position_ball))
-        else:
-            return self.shoot_ball
+            return SoccerAction((self.position_ball - self.position_player), Vector2D(x = 105, y = 80) - self.position_ball)
+        
 
+    @property 
+    def shoot_ball_d(self):
+        """Shoot la balle vers la droite avec un angle de 45 dégré"""
+        if self.distance_player_ball < self.rayon_player_ball:
+            return SoccerAction((self.position_ball - self.position_player), Vector2D(x = 105, y = 10))
+
+    @property
+    def defense(self):
+        """Defenseur"""
+        if (self.position_ball.x <= MILIEU_TERRAIN + 5):
+                return self.shoot_ball_smart
+        elif (self.position_ball - self.position_player >= 70) and (self.position_ball.x >= MILIEU_TERRAIN + 15):
+            return SoccerAction(Vector2D(x = self.position_ball.x - 50, y = self.position_ball.y) - self.position_player)
+        elif (self.position_ball - self.position_player <= 20):
+            return self.shoot_ball
+        else:
+            return SoccerAction(Vector2D(x = GAME_WIDTH/6., y = GAME_HEIGHT/2.) - self.position_player)
+
+    
+    @property
+    def keeper_shoot_g(self):
+        """Shoot vers la gauche du milieu du terrain"""
+        return SoccerAction((self.position_ball - self.position_player), Vector2D(x = MILIEU_TERRAIN - 5, y = GAME_HEIGHT - 5) - self.position_ball)
+
+    @property
+    def keeper_shoot_d(self):
+        """Shoot vers la droite du milieu du terrain"""
+        return SoccerAction((self.position_ball - self.position_player), Vector2D(x = MILIEU_TERRAIN - 5, y = 5) - self.position_ball)
 
     @property
     def position_goalkeeper(self):
         """Position du gardien"""
-        if self.distance_player_ball < GOAL_SURFACE_WIDTH:
-            return self.shoot_ball
-        elif (self.position_ball.y <= GAME_HEIGHT - 50) and (self.position_ball.x >= GAME_WIDTH/11.):
-            return SoccerAction((self.goal_un - 2) - self.position_player) 
-        elif (self.position_ball.y >= GAME_HEIGHT - 40) and (self.position_ball.x >= GAME_WIDTH/11.):
-            return SoccerAction((self.goal_un + 2) - self.position_player)
+        if (self.distance_player_ball <= GOAL_SURFACE_WIDTH):
+            if (self.position_ball.y >= 46):
+                return self.keeper_shoot_g
+            else:
+                return self.keeper_shoot_d
+        elif (self.position_ball.y <= GAME_HEIGHT - 49) and (self.position_ball.x >= GAME_WIDTH/12.):
+            return SoccerAction((self.goal_un - 3) - self.position_player) 
+        elif (self.position_ball.y >= GAME_HEIGHT - 41) and (self.position_ball.x >= GAME_WIDTH/11.):
+            return SoccerAction((self.goal_un + 3) - self.position_player)
         elif (self.position_ball.x >= TIERS_TERRAIN):
             return SoccerAction(Vector2D(x = GAME_WIDTH/11., y = GAME_HEIGHT/2.) - self.position_player)
         return SoccerAction(Vector2D(x = 1, y = GAME_HEIGHT/2.) - self.position_player)
@@ -121,8 +173,8 @@ def gardien(mystate):
 def defenseur(mystate):
     return mystate.defense
 
-def ball_g(mystate):
-    return mystate.shoot_ball_g
+def shooteur_ball_smart(mystate):
+    return mystate.shoot_ball_smart
 
 ######################################################################################################
 #          Miroir: ps un gros problème
