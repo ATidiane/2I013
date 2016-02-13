@@ -27,3 +27,4 @@ attaquante = AllStrategy(strategy.shooteur_ball_smart)
 defenseur  = AllStrategy(strategy.defenseur)
 
 gardien = AllStrategy(strategy.gardien)
+gardien_team4 = AllStrategy(strategy.gardien_team4)
