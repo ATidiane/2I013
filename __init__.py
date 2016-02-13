@@ -3,4 +3,4 @@ import soccersimulator
 from soccersimulator.settings import *
 from soccersimulator import BaseStrategy, SoccerAction
 from soccersimulator import SoccerTournament
-from team import 1, lalya2, lalya4
+from team import lalya1, lalya2, lalya4
