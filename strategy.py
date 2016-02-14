@@ -135,9 +135,27 @@ class Mystate:
             return SoccerAction(Vector2D(), self.goal_deux - self.position_ball)
         return self.fonce_ball
     
-    #@property
-    #def attaquant_g(self):
-        
+    @property
+    def player_team1(self):
+        """Essai de creer un random si la balle se trouve entre le milieu de terrain et le 3ème quart du terrain"""
+        if (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.x < THREE_QUARTER_WIDTH):
+            if self.distance_player_ball < self.rayon_player_ball:
+                return SoccerAction(Vector2D(), Vector2D(x = 150, y = 45).normalize().scale(5) - self.position_ball.normalize().scale(3))
+            return self.fonce_ball
+        elif (self.position_ball.x < MEDIUM_WIDTH) and (self.position_ball.x > QUARTER_WIDTH):
+            if (self.position_ball.y > MEDIUM_HEIGHT):
+                return self.passe_g
+            elif (self.position_ball.y < MEDIUM_HEIGHT):
+                return self.passe_d
+            return self.shoot_ball_smart
+        elif (self.position_ball.x < QUARTER_WIDTH):
+            if (self.position_ball.y > MEDIUM_HEIGHT):
+                return self.defense_shoot_g
+            elif (self.position_ball.y < MEDIUM_HEIGHT):
+                return self.defense_shoot_d
+            return self.shoot_ball
+        else:
+            return self.shoot_ball_smart
 
     @property
     def passe_g(self):
@@ -250,6 +268,8 @@ def fonceur(mystate):
 def fonceur_shooteur(mystate):
     return mystate.shoot_ball
 
+def player_team1(mystate):
+    return mystate.player_team1
 def gardien(mystate):
     return mystate.goalkeeper
 

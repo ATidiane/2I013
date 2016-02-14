@@ -1,13 +1,14 @@
 from soccersimulator import SoccerTeam, Player
 from coordination import *
 
-t1j1 = Player("t1j1", attaquante)
+t1j1 = Player("t1j1", player_team1)
+t1j2 = Player("bete", attaquant)
 lalya1 = SoccerTeam("lalya1", [t1j1])
 moi = Player("moi", gardien)
 lalya1bis = SoccerTeam("lalya1bis", [moi])
 
 t2j1 = Player("t2j1", gardien)
-t2j2 = Player("t2j2", attaquante)
+t2j2 = Player("t2j2", player_team1)
 lalya2 = SoccerTeam("lalya2", [t2j1, t2j2])
 
 t4j1 = Player("t4j1", defenseur)
