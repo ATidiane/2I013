@@ -41,6 +41,18 @@ class Mystate:
         return self.state.player_state(self.id_team, self.id_player).position
 
     @property
+    def position_j_plus_proche(self):
+        """La position du joueur le plus proche"""
+        for joueur in players:
+            pos = self.state.player_state(self.id_team, self.id_player == 0).position
+            mini = self.position_player.distance(pos)
+            joueur = self.state.player_state(joueur).position
+            maxi = self.position_player.distance(joueur)
+            if mini > maxi:
+                pos = joueur
+        return pos
+        
+    @property
     def position_defenseur(self):
         """La position du defenseur dans le terrain"""
         return self.state.player_state(self.id_team, self.id_player == 0).position
@@ -113,7 +125,11 @@ class Mystate:
         if self.distance_player_ball < self.rayon_player_ball:
             return SoccerAction(Vector2D(), self.goal_deux - self.position_ball)
         return self.fonce_ball
-    
+
+    @property
+    def pass_ball_plus_proche(self):
+        """Passe la ball au joueur le plus proche"""
+        return SoccerAction(Vector2D(), (self.position_j_plus_proche - self.position_ball))
     @property
     def shoot_ball_coin_bas(self):
         """Shoot la balle au coin bas, c'est à dire au premier poto du goal_deux"""
@@ -138,16 +154,16 @@ class Mystate:
     @property
     def player_team1(self):
         """Essai de creer un random si la balle se trouve entre le milieu de terrain et le 3ème quart du terrain"""
-        if (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.x < THREE_QUARTER_WIDTH):
+        if (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.x < THREE_QUARTER_WIDTH + 5):
             if self.distance_player_ball < self.rayon_player_ball:
-                return SoccerAction(Vector2D(), Vector2D(x = 150, y = 45).normalize().scale(5) - self.position_ball.normalize().scale(3))
+                return SoccerAction(Vector2D(), (Vector2D(x = 150, y = 45) - self.position_ball).normalize())
             return self.fonce_ball
         elif (self.position_ball.x < MEDIUM_WIDTH) and (self.position_ball.x > QUARTER_WIDTH):
             if (self.position_ball.y > MEDIUM_HEIGHT):
                 return self.passe_g
             elif (self.position_ball.y < MEDIUM_HEIGHT):
                 return self.passe_d
-            return self.shoot_ball_smart
+            return self.shoot_ball
         elif (self.position_ball.x < QUARTER_WIDTH):
             if (self.position_ball.y > MEDIUM_HEIGHT):
                 return self.defense_shoot_g
@@ -155,20 +171,20 @@ class Mystate:
                 return self.defense_shoot_d
             return self.shoot_ball
         else:
-            return self.shoot_ball_smart
+            return self.shoot_ball
 
     @property
     def passe_g(self):
         """Shoot la balle vers la gauche avec un angle de 45 dégré"""
         if self.distance_player_ball < self.rayon_player_ball:
-            return SoccerAction(Vector2D(), Vector2D(x = THREE_QUARTER_WIDTH, y = THREE_QUARTER_HEIGHT) - self.position_ball)
+            return SoccerAction(Vector2D(), (Vector2D(x = THREE_QUARTER_WIDTH, y = THREE_QUARTER_HEIGHT) - self.position_ball))
         return self.fonce_ball
 
     @property 
     def passe_d(self):
         """Shoot la balle vers la droite avec un angle de 45 dégré"""
         if self.distance_player_ball < self.rayon_player_ball:
-            return SoccerAction(Vector2D(), Vector2D(x = THREE_QUARTER_WIDTH, y = QUARTER_HEIGHT) - self.position_ball)
+            return SoccerAction(Vector2D(), (Vector2D(x = THREE_QUARTER_WIDTH, y = QUARTER_HEIGHT) - self.position_ball))
         return self.fonce_ball
         
     @property
