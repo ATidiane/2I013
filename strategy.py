@@ -331,11 +331,11 @@ class Mystate:
                 return self.keeper_shoot_g
         elif (self.distance_gardien_ball < self.distance_player_ball) and (self.position_ball.x < QUARTER_WIDTH):
             return self.shoot_ball
-        elif (self.position_ball.x > MEDIUM_WIDTH - 10) and (self.position_ball.y > THREE_QUARTER_WIDTH and self.position_ball.y < THREE_QUARTER_WIDTH):
+        elif (self.position_ball.x > MEDIUM_WIDTH - 5) and (self.position_ball.y > THREE_QUARTER_WIDTH and self.position_ball.y < THREE_QUARTER_WIDTH):
             return SoccerAction(Vector2D(x = QUARTER_WIDTH - 10, y = self.position_ball.y) - self.position_player)
         elif (self.position_ball.x > MEDIUM_WIDTH - 10) and (self.position_ball.y < THREE_QUARTER_WIDTH or self.position_ball.y > THREE_QUARTER_WIDTH):
             return SoccerAction(Vector2D(x = QUARTER_WIDTH - 10 , y = MEDIUM_HEIGHT) - self.position_player)
-        elif (self.position_ball.x <= MEDIUM_WIDTH - 10) and (self.position_ball.x >= QUARTER_WIDTH + 10):
+        elif (self.position_ball.x <= MEDIUM_WIDTH - 5) and (self.position_ball.x >= QUARTER_WIDTH + 10):
             return SoccerAction(Vector2D(x = QUARTER_WIDTH - 25, y = MEDIUM_HEIGHT) - self.position_player)
         else:
             return SoccerAction(Vector2D(x = 1, y = MEDIUM_HEIGHT) - self.position_player)
@@ -383,6 +383,53 @@ class Mystate:
         else:
             return SoccerAction(Vector2D(x = GAME_WIDTH/6., y = MEDIUM_HEIGHT) - self.position_player)
 
+    @property
+    def player_team41(self):
+        if (self.position_ball.y > MEDIUM_HEIGHT):
+            if (self.position_ball.x <= MEDIUM_WIDTH + 5):
+                if (self.distance_defenseur_ball <= QUARTER_WIDTH - 25):
+                    if (self.distance_player_ball < self.rayon_player_ball):
+                        return self.passe_g_normalize
+                    else:
+                        return SoccerAction(Vector2D(x = THREE_QUARTER_WIDTH, y = THREE_QUARTER_HEIGHT) - self.position_player)
+                else:
+                    if (self.distance_player_ball < self.rayon_player_ball):
+                        return self.passe_g_normalize
+                    return self.fonce_ball
+            else:
+                if (self.position_ball.x > THREE_QUARTER_WIDTH):
+                    return self.shoot_ball_smart
+                else:
+                    if self.distance_player_ball < self.rayon_player_ball:
+                        return SoccerAction(Vector2D(), (Vector2D(x = GAME_WIDTH, y = MEDIUM_HEIGHT) - self.position_ball).normalize().scale(2))
+                    return self.fonce_ball
+        return SoccerAction(Vector2D(x = self.position_ball.x, y = MEDIUM_HEIGHT + 10) - self.position_player)
+        
+        
+
+    @property
+    def player_team42(self):
+        if (self.position_ball.y < MEDIUM_HEIGHT):
+            if (self.position_ball.x <= MEDIUM_WIDTH + 10):
+                if (self.distance_defenseur_ball <= QUARTER_WIDTH - 25):
+                    if (self.distance_player_ball < self.rayon_player_ball):
+                        return self.passe_d_normalize
+                    else:
+                        return SoccerAction(Vector2D(x = THREE_QUARTER_WIDTH, y = QUARTER_HEIGHT) - self.position_player)
+                else:
+                    if (self.distance_player_ball < self.rayon_player_ball):
+                        return self.passe_d_normalize
+                    return self.fonce_ball
+            else:
+                if (self.position_ball.x > THREE_QUARTER_WIDTH):
+                    return self.shoot_ball_smart
+                else:
+                    if self.distance_player_ball < self.rayon_player_ball:
+                        return SoccerAction(Vector2D(), (Vector2D(x = GAME_WIDTH, y = MEDIUM_HEIGHT) - self.position_ball).normalize().scale(2))
+                    else:
+                        return self.fonce_ball
+        return SoccerAction(Vector2D(x = self.position_ball.x, y = MEDIUM_HEIGHT - 10) - self.position_player)
+
 ######################################################################################################
 #                         Fin de mes petites strategies
 ######################################################################################################
@@ -404,6 +451,12 @@ def player_team1(mystate):
 
 def player_team2(mystate):
     return mystate.player_team2
+
+def player_team41(mystate):
+    return mystate.player_team41
+
+def player_team42(mystate):
+    return mystate.player_team42
 
 def gardien(mystate):
     return mystate.goalkeeper
