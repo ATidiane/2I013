@@ -272,7 +272,7 @@ class Mystate:
             if self.distance_player_ball < self.rayon_player_ball:
                 return SoccerAction(Vector2D(), (Vector2D(x = THREE_QUARTER_WIDTH, y = MEDIUM_HEIGHT + 4)))
             return self.fonce_ball
-        elif (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.x < THREE_QUARTER_WIDTH + 5):
+        elif (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.x < THREE_QUARTER_WIDTH):
             if self.distance_player_ball < self.rayon_player_ball:
                 return self.run_ball_avant_normalize
             return self.fonce_ball
@@ -312,7 +312,7 @@ class Mystate:
             elif (self.position_ball.y < MEDIUM_HEIGHT):
                 return self.passe_d_normalize
             return self.shoot_ball
-        elif (self.position_ball.x < QUARTER_WIDTH - 10):
+        elif (self.distance_gardien_ball < QUARTER_WIDTH - 10 ):
             if (self.position_ball.y >= MEDIUM_HEIGHT + 1):
                 return SoccerAction(Vector2D(x = MEDIUM_WIDTH - 10, y = 7) - self.position_player)
             elif (self.position_ball.y < MEDIUM_HEIGHT):
@@ -324,19 +324,19 @@ class Mystate:
     @property
     def goalkeeper(self):
         """Position du gardien"""
-        if (self.distance_player_ball <= QUARTER_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT + 5) and (self.position_ball.y > QUARTER_HEIGHT - 5) and (self.position_ball.x < QUARTER_WIDTH):
+        if (self.distance_player_ball <= QUARTER_WIDTH - 10) and (self.position_ball.y < THREE_QUARTER_HEIGHT) and (self.position_ball.y > QUARTER_HEIGHT): 
             if (self.position_ball.y >= 46):
                 return self.keeper_shoot_d
             else:
                 return self.keeper_shoot_g
         elif (self.distance_gardien_ball < self.distance_player_ball) and (self.position_ball.x < QUARTER_WIDTH):
             return self.shoot_ball
-        #elif (self.position_ball.y <= GAME_HEIGHT - 49) and (self.position_ball.x > GAME_WIDTH/8.) and (self.position_ball.x < THIRD_WIDTH):
-        #    return SoccerAction((self.goal_un - Vector2D(x = 0, y = 3)) - self.position_player) 
-        #elif (self.position_ball.y >= GAME_HEIGHT - 41) and (self.position_ball.x > GAME_WIDTH/8.) and (self.position_ball.x < THIRD_WIDTH):
-        #    return SoccerAction((self.goal_un + Vector2D(x = 0, y = 3)) - self.position_player)
-        elif (self.position_ball.x >= THIRD_WIDTH):
-            return SoccerAction(Vector2D(x = GAME_WIDTH/11., y = MEDIUM_HEIGHT) - self.position_player)
+        elif (self.position_ball.x > MEDIUM_WIDTH - 10) and (self.position_ball.y > THREE_QUARTER_WIDTH and self.position_ball.y < THREE_QUARTER_WIDTH):
+            return SoccerAction(Vector2D(x = QUARTER_WIDTH - 10, y = self.position_ball.y) - self.position_player)
+        elif (self.position_ball.x > MEDIUM_WIDTH - 10) and (self.position_ball.y < THREE_QUARTER_WIDTH or self.position_ball.y > THREE_QUARTER_WIDTH):
+            return SoccerAction(Vector2D(x = QUARTER_WIDTH - 10 , y = MEDIUM_HEIGHT) - self.position_player)
+        elif (self.position_ball.x <= MEDIUM_WIDTH - 10) and (self.position_ball.x >= QUARTER_WIDTH + 10):
+            return SoccerAction(Vector2D(x = QUARTER_WIDTH - 25, y = MEDIUM_HEIGHT) - self.position_player)
         else:
             return SoccerAction(Vector2D(x = 1, y = MEDIUM_HEIGHT) - self.position_player)
 
