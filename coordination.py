@@ -21,8 +21,12 @@ class AllStrategy(BaseStrategy):
         return res
 
 
-player_team1 = AllStrategy(strategy.player_team1)
 
+passeur = AllStrategy(strategy.essai)
+z = AllStrategy(strategy.rien)
+
+
+player_team1 = AllStrategy(strategy.player_team1)
 
 attaquant = AllStrategy(strategy.fonceur_shooteur)
 attaquante = AllStrategy(strategy.shooteur_ball_smart)

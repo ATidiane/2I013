@@ -1,7 +1,7 @@
 from soccersimulator import show
 from soccersimulator import SoccerMatch
 from soccersimulator import KeyboardStrategy
-from team import lalya1, lalya2, lalya4, lalya1bis
+from team import lalya1, lalya2, lalya4, lalya1bis, lalya0
 from coordination import *
 
 match_lalya1 = SoccerMatch(lalya1, lalya1)
@@ -9,7 +9,7 @@ match_lalya2 = SoccerMatch(lalya2, lalya2)
 match_lalya4 = SoccerMatch(lalya4, lalya4)
 
 
-match_lalya5 = SoccerMatch(lalya4, lalya2)
+match_lalya5 = SoccerMatch(lalya1bis, lalya1)
 if __name__ == "__main__":
     strat = KeyboardStrategy(fn="monfichier.exp")
     #fn veut dire filename
