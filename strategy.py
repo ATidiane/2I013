@@ -29,6 +29,7 @@ class Mystate:
     def do_nothing(self):
         """Ne fais rien ;)"""
         return SoccerAction()
+   
     @property
     def position_ball(self):
         """Position de la balle"""
@@ -267,7 +268,7 @@ class Mystate:
 
     @property
     def player_team1(self):
-        """Essai de creer un random si la balle se trouve entre le milieu de terrain et le 3ème quart du terrain"""
+        """Joueur de la team1"""
         if (self.position_ball.x == MEDIUM_WIDTH) and (self.position_ball.y == MEDIUM_HEIGHT):
             if self.distance_player_ball < self.rayon_player_ball:
                 return SoccerAction(Vector2D(), (Vector2D(x = THREE_QUARTER_WIDTH, y = MEDIUM_HEIGHT + 4)))
@@ -281,7 +282,7 @@ class Mystate:
                 return self.passe_g
             elif (self.position_ball.y < MEDIUM_HEIGHT):
                 return self.passe_d
-            return self.shoot_ball
+            return self.shoot_ball_smart
         elif (self.position_ball.x < QUARTER_WIDTH):
             if (self.position_ball.y > MEDIUM_HEIGHT):
                 return self.defense_shoot_d
@@ -297,7 +298,7 @@ class Mystate:
 
     @property
     def player_team2(self):
-        """Essai de creer un random si la balle se trouve entre le milieu de terrain et le 3ème quart du terrain"""
+        """Attaquant de la team2"""
         if (self.position_ball.x == MEDIUM_WIDTH) and (self.position_ball.y == MEDIUM_HEIGHT):
             if self.distance_player_ball < self.rayon_player_ball:
                 return SoccerAction(Vector2D(), (Vector2D(x = THREE_QUARTER_WIDTH, y = MEDIUM_HEIGHT + 4)))
@@ -323,7 +324,7 @@ class Mystate:
 
     @property
     def goalkeeper(self):
-        """Position du gardien"""
+        """Gardien de la team2"""
         if (self.distance_player_ball <= QUARTER_WIDTH - 10) and (self.position_ball.y < THREE_QUARTER_HEIGHT) and (self.position_ball.y > QUARTER_HEIGHT): 
             if (self.position_ball.y >= 46):
                 return self.keeper_shoot_d
@@ -346,7 +347,7 @@ class Mystate:
     
     @property
     def goalkeeper_team4(self):
-        """Position du gardien"""
+        """Gardien de la team4"""
         if (self.distance_player_ball <= QUARTER_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT + 5) and (self.position_ball.y > QUARTER_HEIGHT - 5) and (self.position_ball.x < QUARTER_WIDTH + 5):
             if (self.position_ball.y >= 46):
                 return self.keeper_shoot_d
@@ -365,7 +366,7 @@ class Mystate:
     
     @property
     def defense(self):
-        """Defenseur"""
+        """Defenseur de la team4"""
         if (self.position_ball.x <= MEDIUM_WIDTH + 10) and (self.position_ball.x > QUARTER_WIDTH):
             if (self.position_ball.y > MEDIUM_HEIGHT):
                 return self.passe_g
@@ -385,6 +386,7 @@ class Mystate:
 
     @property
     def player_team41(self):
+        """Attaquant elié gauche;) je pense"""
         if (self.position_ball.y > MEDIUM_HEIGHT):
             if (self.position_ball.x <= MEDIUM_WIDTH + 5):
                 if (self.distance_defenseur_ball <= QUARTER_WIDTH - 25):
@@ -409,6 +411,7 @@ class Mystate:
 
     @property
     def player_team42(self):
+        """Attaquant elié droit ;) encore je pense"""
         if (self.position_ball.y < MEDIUM_HEIGHT):
             if (self.position_ball.x <= MEDIUM_WIDTH + 10):
                 if (self.distance_defenseur_ball <= QUARTER_WIDTH - 25):
