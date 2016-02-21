@@ -3,9 +3,9 @@ from coordination import *
 
 t0 = Player("t0", z)
 t1 = Player("t1", z)
-t2 = Player("t3", z)
-essai = Player("essai", passeur)
-lalya0 = SoccerTeam("passe", [t0, t1, t2, essai])
+t2 = Player("t2", z)
+t3 = Player("t3", z)
+lalya0 = SoccerTeam("passe", [t0, t1, t2, t3])
 
 
 t1j1 = Player("t1j1", player_team1)

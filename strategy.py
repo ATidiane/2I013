@@ -3,6 +3,7 @@ import soccersimulator
 from soccersimulator.settings import *
 from soccersimulator import SoccerAction, SoccerState, Vector2D, Player
 from math import pi
+from random import *
 
 #DEFINITION DES CONSTANTES
 
@@ -158,12 +159,16 @@ class Mystate:
     @property
     def run_ball_avant_normalize(self):
         """Cours avec la ball vers le goal deux"""
-        return SoccerAction(Vector2D(), (self.goal_deux - self.position_ball).normalize().scale(4))
+        if self.distance_player_ball < self.rayon_player_ball:
+            return SoccerAction(Vector2D(), (self.goal_deux - self.position_ball).normalize().scale(2))
+        return self.fonce_ball
 
     @property
     def run_ball_arriere_normalize(self):
         """Cours avec la ball vers le goal un (son propre goal)"""
-        return SoccerAction(Vector2D(), (self.goal_un - self.position_ball).normalize().scale(2))
+        if self.distance_player_ball < self.rayon_player_ball:
+            return SoccerAction(Vector2D(), (self.goal_un - self.position_ball).normalize().scale(2))
+        return self.fonce_ball
 
     @property
     def run_ball_angle_0(self):
@@ -203,7 +208,8 @@ class Mystate:
                 return self.shoot_ball_coin_bas
             elif (self.position_ball.y >= GAME_HEIGHT - 44) and (self.position_ball.x >= MEDIUM_WIDTH - 5):
                 return self.shoot_ball_coin_haut
-            return SoccerAction(Vector2D(), self.goal_deux - self.position_ball)
+            L = [self.shoot_ball_coin_bas, self.shoot_ball_coin_haut]
+            return choice(L)
         return self.fonce_ball
     
     @property
@@ -275,7 +281,7 @@ class Mystate:
             return self.fonce_ball
         elif (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.x < THREE_QUARTER_WIDTH):
             if self.distance_player_ball < self.rayon_player_ball:
-                return self.run_ball_avant_normalize
+                return SoccerAction(Vector2D(), (self.goal_deux - self.position_ball).normalize().scale(4))
             return self.fonce_ball
         elif (self.position_ball.x < MEDIUM_WIDTH) and (self.position_ball.x > QUARTER_WIDTH):
             if (self.position_ball.y > MEDIUM_HEIGHT):
@@ -372,13 +378,13 @@ class Mystate:
                 return self.passe_g
             elif (self.position_ball.y < MEDIUM_HEIGHT):
                 return self.passe_d
-            return self.shoot_ball
+            return self.shoot_ball_smart
         elif (self.position_ball.x <= QUARTER_WIDTH):
             if (self.position_ball.y > MEDIUM_HEIGHT):
                 return self.defense_shoot_d
             elif (self.position_ball.y < MEDIUM_HEIGHT):
                 return self.defense_shoot_g
-            return self.shoot_ball
+            return self.shoot_ball_smart
         elif (self.position_ball.x - self.position_player.x >= 50) and (self.position_ball.x >= MEDIUM_WIDTH + 10):
             return SoccerAction(Vector2D(x = self.position_ball.x - 50, y = self.position_ball.y) - self.position_player)
         else:
@@ -402,9 +408,7 @@ class Mystate:
                 if (self.position_ball.x > THREE_QUARTER_WIDTH):
                     return self.shoot_ball_smart
                 else:
-                    if self.distance_player_ball < self.rayon_player_ball:
-                        return SoccerAction(Vector2D(), (Vector2D(x = GAME_WIDTH, y = MEDIUM_HEIGHT) - self.position_ball).normalize().scale(2))
-                    return self.fonce_ball
+                    return self.run_ball_avant_normalize
         return SoccerAction(Vector2D(x = self.position_ball.x, y = MEDIUM_HEIGHT + 10) - self.position_player)
         
         
@@ -427,10 +431,7 @@ class Mystate:
                 if (self.position_ball.x > THREE_QUARTER_WIDTH):
                     return self.shoot_ball_smart
                 else:
-                    if self.distance_player_ball < self.rayon_player_ball:
-                        return SoccerAction(Vector2D(), (Vector2D(x = GAME_WIDTH, y = MEDIUM_HEIGHT) - self.position_ball).normalize().scale(2))
-                    else:
-                        return self.fonce_ball
+                    return self.run_ball_avant_normalize
         return SoccerAction(Vector2D(x = self.position_ball.x, y = MEDIUM_HEIGHT - 10) - self.position_player)
 
 ######################################################################################################
@@ -446,8 +447,7 @@ def rien(mystate):
 def fonceur(mystate):
     return mystate.fonce_ball
 
-def fonceur_shooteur(mystate):
-    return mystate.shoot_ball
+
 
 def player_team1(mystate):
     return mystate.player_team1
@@ -470,9 +470,17 @@ def gardien_team4(mystate):
 def defenseur(mystate):
     return mystate.defense
 
+######################################################################################################
+#                          Strategies simples à utiliser avec KeyboardStrategy
+######################################################################################################
+def fonceur_shooteur(mystate):
+    return mystate.shoot_ball
+
 def shooteur_ball_smart(mystate):
     return mystate.shoot_ball_smart
 
+def run_ball_avant_normalize(mystate):
+    return mystate.run_ball_avant_normalize
 ######################################################################################################
 #          Miroir: ps un gros problème
 ######################################################################################################

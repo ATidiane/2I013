@@ -31,9 +31,17 @@ player_team2 = AllStrategy(strategy.player_team2)
 player_team41 = AllStrategy(strategy.player_team41)
 player_team42 = AllStrategy(strategy.player_team42)
 attaquant = AllStrategy(strategy.fonceur_shooteur)
-attaquante = AllStrategy(strategy.shooteur_ball_smart)
+
 
 defenseur  = AllStrategy(strategy.defenseur)
 
 gardien = AllStrategy(strategy.gardien)
 gardien_team4 = AllStrategy(strategy.gardien_team4)
+
+
+######################################################################################################
+#                      Ensemble de strategies générales pour la KeyboardStrategy
+######################################################################################################
+fonceur_shooteur = AllStrategy(strategy.fonceur_shooteur)
+buteur = AllStrategy(strategy.shooteur_ball_smart)
+runv_goal = AllStrategy(strategy.run_ball_avant_normalize)
