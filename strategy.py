@@ -304,19 +304,19 @@ class Mystate:
             return self.fonce_ball
         elif (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.x < THREE_QUARTER_WIDTH + 5):
             if self.distance_player_ball < self.rayon_player_ball:
-                return self.run_ball_avant_normalize
+                return SoccerAction(Vector2D(), (Vector2D(x = GAME_WIDTH, y = MEDIUM_HEIGHT) - self.position_ball).normalize().scale(2))
             return self.fonce_ball
         elif (self.position_ball.x < MEDIUM_WIDTH) and (self.position_ball.x > QUARTER_WIDTH):
             if (self.position_ball.y > MEDIUM_HEIGHT):
-                return self.passe_g
+                return self.passe_g_normalize
             elif (self.position_ball.y < MEDIUM_HEIGHT):
-                return self.passe_d
+                return self.passe_d_normalize
             return self.shoot_ball
-        elif (self.position_ball.x < QUARTER_WIDTH):
-            if (self.position_ball.y > MEDIUM_HEIGHT):
-                return self.defense_shoot_d
+        elif (self.position_ball.x < QUARTER_WIDTH - 10):
+            if (self.position_ball.y >= MEDIUM_HEIGHT + 1):
+                return SoccerAction(Vector2D(x = MEDIUM_WIDTH - 10, y = 7) - self.position_player)
             elif (self.position_ball.y < MEDIUM_HEIGHT):
-                return self.defense_shoot_g
+                return SoccerAction(Vector2D(x = MEDIUM_WIDTH - 10, y = GAME_HEIGHT - 7) - self.position_player)
             return self.shoot_ball
         return self.shoot_ball_smart
 
@@ -324,7 +324,7 @@ class Mystate:
     @property
     def goalkeeper(self):
         """Position du gardien"""
-        if (self.distance_player_ball <= QUARTER_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT + 5) and (self.position_ball.y > QUARTER_HEIGHT - 5):
+        if (self.distance_player_ball <= QUARTER_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT + 5) and (self.position_ball.y > QUARTER_HEIGHT - 5) and (self.position_ball.x < QUARTER_WIDTH):
             if (self.position_ball.y >= 46):
                 return self.keeper_shoot_d
             else:
@@ -347,7 +347,7 @@ class Mystate:
     @property
     def goalkeeper_team4(self):
         """Position du gardien"""
-        if (self.distance_player_ball <= GOAL_SURFACE_WIDTH):
+        if (self.distance_player_ball <= QUARTER_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT + 5) and (self.position_ball.y > QUARTER_HEIGHT - 5) and (self.position_ball.x < QUARTER_WIDTH + 5):
             if (self.position_ball.y >= 46):
                 return self.keeper_shoot_d
             else:
