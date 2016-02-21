@@ -27,7 +27,7 @@ z = AllStrategy(strategy.rien)
 
 
 player_team1 = AllStrategy(strategy.player_team1)
-
+player_team2 = AllStrategy(strategy.player_team2)
 attaquant = AllStrategy(strategy.fonceur_shooteur)
 attaquante = AllStrategy(strategy.shooteur_ball_smart)
 

@@ -16,7 +16,7 @@ lalya1bis = SoccerTeam("lalya1bis", [moi])
 
 
 t2j1 = Player("t2j1", gardien)
-t2j2 = Player("t2j2", player_team1)
+t2j2 = Player("t2j2", player_team2)
 lalya2 = SoccerTeam("lalya2", [t2j1, t2j2])
 
 t4j1 = Player("t4j1", defenseur)

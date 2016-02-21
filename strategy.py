@@ -296,7 +296,7 @@ class Mystate:
 ######################################################################################################
 
     @property
-    def player_team1(self):
+    def player_team2(self):
         """Essai de creer un random si la balle se trouve entre le milieu de terrain et le 3ème quart du terrain"""
         if (self.position_ball.x == MEDIUM_WIDTH) and (self.position_ball.y == MEDIUM_HEIGHT):
             if self.distance_player_ball < self.rayon_player_ball:
@@ -401,6 +401,9 @@ def fonceur_shooteur(mystate):
 
 def player_team1(mystate):
     return mystate.player_team1
+
+def player_team2(mystate):
+    return mystate.player_team2
 
 def gardien(mystate):
     return mystate.goalkeeper
