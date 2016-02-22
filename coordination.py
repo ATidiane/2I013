@@ -24,7 +24,7 @@ class AllStrategy(BaseStrategy):
 
 passeur = AllStrategy(strategy.essai)
 z = AllStrategy(strategy.rien)
-
+dribleur = AllStrategy(strategy.dribleur)
 
 player_team1 = AllStrategy(strategy.player_team1)
 player_team2 = AllStrategy(strategy.player_team2)
@@ -45,3 +45,4 @@ gardien_team4 = AllStrategy(strategy.gardien_team4)
 fonceur_shooteur = AllStrategy(strategy.fonceur_shooteur)
 buteur = AllStrategy(strategy.shooteur_ball_smart)
 runv_goal = AllStrategy(strategy.run_ball_avant_normalize)
+runv_goal_arr = AllStrategy(strategy.run_ball_arriere_normalize)
