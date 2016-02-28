@@ -47,23 +47,79 @@ class Mystate:
         return self.state.player_state(self.id_team, self.id_player).position
     
     @property
-    def nbj_team4(self):
-        """Nombres de joueurs de la team2"""
-        return self.state.nb_players(4)
+    def myguys_position(self):
+        """Position de tous mes joueurs"""
+        if self.state.nb_players(1) == 1:
+            lalya = []
+            if self.id_team == 1:
+                lalya.append(self.state.player_state(1, 0).position)
+            else:
+                lalya.append(self.state.player_state(2, 0).position)
+            return lalya
+        elif self.state.nb_players(2) == 2:
+            if self.id_team == 1:
+                lalya = []
+                for i in range(2):
+                    pos = self.state.player_state(1, i).position
+                    lalya.append(pos)
+                return lalya
+            else:
+                lalya = []
+                for i in range(2):
+                    pos = self.state.player_state(2, i).position
+                    lalya.append(pos)
+                return lalya
+        elif self.state.nb_players(4) == 4:
+            if self.id_team == 1:
+                lalya = []
+                for i in range(3):
+                    pos = self.state.player_state(1, i).position
+                    lalya.append(pos)
+                return lalya
+            else:
+                lalya = []
+                for i in range(3):
+                    pos = self.state.player_state(2, i).position
+                    lalya.append(pos)
+                return lalya
 
     @property
-    def position_player_adv(self):
-        """La position du joueur le plus proche"""
-        if self.id_team == 1:
-            return self.state.player_state(2, 0).position
-        else:
-            return self.state.player_state(1, 0).position
-
-                                                                      ########################################
-    @property
-    def position_defenseur(self):
-        """La position du defenseur dans le terrain"""
-        return self.state.player_state(self.id_team, self.id_player == 0).position
+    def adv_position(self):
+        """Position de tous mes joueurs"""
+        if self.state.nb_players(1) == 1:
+            lalya = []
+            if self.id_team == 1:
+                lalya.append(self.state.player_state(2, 0).position)
+            else:
+                lalya.append(self.state.player_state(1, 0).position)
+            return lalya
+        elif self.state.nb_players(2) == 2:
+            if self.id_team == 1:
+                lalya = []
+                for i in range(2):
+                    pos = self.state.player_state(2, i).position
+                    lalya.append(pos)
+                return lalya
+            else:
+                lalya = []
+                for i in range(2):
+                    pos = self.state.player_state(1, i).position
+                    lalya.append(pos)
+                return lalya
+        elif self.state.nb_players(4) == 4:
+            if self.id_team == 1:
+                lalya = []
+                for i in range(3):
+                    pos = self.state.player_state(2, i).position
+                    lalya.append(pos)
+                return lalya
+            else:
+                lalya = []
+                for i in range(3):
+                    pos = self.state.player_state(1, i).position
+                    lalya.append(pos)
+                return lalya
+    
     
     @property
     def position_attaquant_g(self):
@@ -100,28 +156,6 @@ class Mystate:
         """Position du goal2, c'est à dire à droite"""
         return Vector2D(x = GAME_WIDTH, y = MEDIUM_HEIGHT)
     
-#######################
-    @property
-    def angle_0(self):
-        """Complètement vers la droite"""
-        return Vector2D(angle = 0, norm = 1)
-
-    @property
-    def angle_pi6(self):
-        """Tourne d'un angle de pi/6"""
-        return Vector2D(angle = pi/6, norm = 1)
-
-    @property
-    def angle_pi4(self):
-        """D'un angle de pi/4"""
-        return Vector2D(angle = pi/4, norm = 1)
-
-    @property
-    def angle_pi(self):
-        """D'un angle de pi"""
-        return Vector2D(angle = pi, norm = 1)
-#######################
-
     @property
     def distance_player_ball(self):
         """Distance entre le joueur et la balle	"""
@@ -130,7 +164,7 @@ class Mystate:
     @property
     def distance_lalya1(self):
         """Distance entre le joueur de la team1 et celui de la team2 pour l'équipe lalya1"""
-        return self.position_player.distance(self.position_player_adv)
+        return self.position_player.distance(self.adv_position[0])
 
     @property
     def distance_defenseur_ball(self):
@@ -157,12 +191,13 @@ class Mystate:
     @property
     def drible(self):
         """Drible le joueur en face to face"""
+        adv_pos = self.adv_position
         if self.distance_player_ball < self.rayon_player_ball:
-            if self.distance_lalya1 < 30 and self.position_player.x < self.position_player_adv.x:
+            if self.distance_lalya1 < 20 and self.position_player.x < adv_pos[0].x:
                 if self.position_ball.y > MEDIUM_HEIGHT:
-                    return SoccerAction(Vector2D(), (Vector2D(x = self.position_player_adv.x + 5, y = self.position_player_adv.y + 20) - self.position_ball).norm_max(1))
+                    return SoccerAction(Vector2D(), (Vector2D(x = adv_pos[0].x + 10, y = adv_pos[0].y + 20) - self.position_ball).norm_max(1))
                 else:
-                    return SoccerAction(Vector2D(), (Vector2D(x = self.position_player_adv.x + 5, y = self.position_player_adv.y - 20) - self.position_ball).norm_max(1))
+                    return SoccerAction(Vector2D(), (Vector2D(x = adv_pos[0].x + 10, y = adv_pos[0].y - 20) - self.position_ball).norm_max(1))
             return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(1))
         return self.shoot_ball
     
@@ -180,8 +215,9 @@ class Mystate:
     @property
     def passe_ball_pproche(self):
         """Passe la balle au joueur le plus proche"""
+        adv_pos = self.adv_position
         if self.distance_player_ball < self.rayon_player_ball:
-            return SoccerAction(Vector2D(), (self.position_player_adv - self.position_ball).norm_max(5))
+            return SoccerAction(Vector2D(), (self.adv_pos[0] - self.position_ball).norm_max(5))
         return self.fonce_ball
 
     @property
@@ -472,7 +508,7 @@ def essai(mystate):
     return mystate.passe_ball_pproche
 
 def rien(mystate):
-    return mystate.do_nothing
+    return mystate.myguys_position
 
 def fonceur(mystate):
     return mystate.fonce_ball

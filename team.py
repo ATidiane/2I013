@@ -6,7 +6,7 @@ t1 = Player("t1", buteur)
 t2 = Player("t2", z)
 t3 = Player("t3", z)
 lalya0 = SoccerTeam("dribleur", [t0])
-lalya0bis = SoccerTeam("rien", [t1])
+lalya0bis = SoccerTeam("rien", [t1, t2, t3])
 
 
 t1j1 = Player("t1j1", player_team1)
