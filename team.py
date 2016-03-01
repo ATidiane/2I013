@@ -1,12 +1,14 @@
 from soccersimulator import SoccerTeam, Player
 from coordination import *
+from decisiontree import gen_features, DTreeStrategy
+from myIA import treeStrat
 
 t0 = Player("t0", dribleur)
-t1 = Player("t1", buteur)
+t1 = Player("t1", passeur)
 t2 = Player("t2", z)
 t3 = Player("t3", z)
 lalya0 = SoccerTeam("dribleur", [t0])
-lalya0bis = SoccerTeam("rien", [t1, t2, t3])
+lalya0bis = SoccerTeam("rien", [t1, t2])
 
 
 t1j1 = Player("t1j1", player_team1)
@@ -25,3 +27,9 @@ t4j2 = Player("t4j2", player_team41)
 t4j3 = Player("t4j3", gardien_team4)
 t4j4 = Player("t4j4", player_team42)
 lalya4 = SoccerTeam("lalya4", [t4j1, t4j2, t4j3, t4j4])
+
+#######################################
+# strat IA
+#######################################
+t1j1IA = Player("IA",treeStrat)
+lalya1IA = SoccerTeam("iateam",[t1j1IA])

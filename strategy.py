@@ -167,6 +167,52 @@ class Mystate:
         return self.position_player.distance(self.adv_position[0])
 
     @property
+    def distance_adv(self):
+        """Distance entre le joueur qui a le ballon et les adv"""
+        dist = []
+        for inter in self.adv_position:
+            rep = self.position_player.distance(inter)
+            dist.append(inter)
+        return dist
+
+    @property
+    def distance_myguys(self):
+        """Distance entre le joueur qui a le ballon et ses amis"""
+        dist = []
+        for inter in self.myguys_position:
+            rep = self.position_player.distance(inter)
+            dist.append()
+        return dist
+
+    @property
+    def proche(self, rang=1):
+        """Le joueur le plus proche en fonction du rang ;)"""
+        monrg = self.distance_myguys
+        rgt = sorted(monrg)
+        if rang == 1:
+            return rgt[0]
+        elif rang == 2:
+            return rgt[1]
+        elif rang == 3:
+            return rgt[2]
+        else:
+            return rgt[3]
+
+    @property
+    def proche_adv(self, rang=1):
+        """Le joueur le plus proche en fonction du rang ;)"""
+        monrg = self.distance_adv
+        rgt = sorted(monrg)
+        if rang == 1:
+            return rgt[0]
+        elif rang == 2:
+            return rgt[1]
+        elif rang == 3:
+            return rgt[2]
+        else:
+            return rgt[3]
+        
+    @property
     def distance_defenseur_ball(self):
         """Distance entre le joueur et la balle	"""
         return self.position_ball.distance(self.position_defenseur)
@@ -236,24 +282,11 @@ class Mystate:
 
                                 ############################
     @property
-    def run_ball_angle_0(self):
-        """Run with angle = 0"""
-        return SoccerAction(Vector2D(), (self.angle_0 - self.position_ball).normalize().scale(2))
-
-    @property
-    def run_ball_angle_pi6(self):
-        """Run with angle = pi/6"""
-        return SoccerAction(self.position_ball - self.position_player, (self.angle_pi6 - self.position_ball).normalize().scale(2))
-
-    @property
-    def run_ball_angle_pi(self):
-        """Run with a pi angle"""
-        return SoccerAction(Vector2D(), (self.angle_pi - self.position_ball).normalize().scale(2))
-
-    @property
-    def pass_ball_plus_proche(self):
+    def pass_proche(self, qui=1):
         """Passe la ball au joueur le plus proche"""
-        return SoccerAction(Vector2D(), (self.position_j_plus_proche - self.position_ball))
+        if self.distance_player_ball < self.rayon_player_ball:
+            return SoccerAction(Vector2D(), (self.proche(qui) - self.position_ball))
+        return self.fonce_ball
                                #############################
                                
     @property
@@ -505,17 +538,13 @@ class Mystate:
 ######################################################################################################
 
 def essai(mystate):
-    return mystate.passe_ball_pproche
+    return mystate.pass_proche
 
 def rien(mystate):
     return mystate.myguys_position
 
 def fonceur(mystate):
     return mystate.fonce_ball
-
-def dribleur(mystate):
-    return mystate.drible
-
 def player_team1(mystate):
     return mystate.player_team1
 
@@ -551,6 +580,9 @@ def run_ball_avant_normalize(mystate):
 
 def run_ball_arriere_normalize(mystate):
     return mystate.run_ball_arriere_normalize
+
+def dribleur(mystate):
+    return mystate.drible
 
 ######################################################################################################
 #          Miroir: ps un gros problème
