@@ -1,4 +1,4 @@
-# -*-coding: utf8 -*
+ # -*-coding: utf8 -*
 import soccersimulator
 from soccersimulator.settings import *
 from soccersimulator import SoccerAction, SoccerState, Vector2D, Player
@@ -55,37 +55,40 @@ class Mystate:
                 lalya.append(self.state.player_state(1, 0).position)
             else:
                 lalya.append(self.state.player_state(2, 0).position)
-            return lalya
         elif self.state.nb_players(2) == 2:
             if self.id_team == 1:
                 lalya = []
                 for i in range(2):
                     pos = self.state.player_state(1, i).position
                     lalya.append(pos)
-                return lalya
             else:
                 lalya = []
                 for i in range(2):
                     pos = self.state.player_state(2, i).position
                     lalya.append(pos)
-                return lalya
         elif self.state.nb_players(4) == 4:
             if self.id_team == 1:
                 lalya = []
                 for i in range(3):
                     pos = self.state.player_state(1, i).position
                     lalya.append(pos)
-                return lalya
             else:
                 lalya = []
                 for i in range(3):
                     pos = self.state.player_state(2, i).position
                     lalya.append(pos)
-                return lalya
+
+        # for i in lalya:
+        # dist = []
+        # for inter in self.myguys_position:
+        #     rep = self.position_player.distance(inter)
+        #     dist.append(rep, inter)
+        # return dist
+            
 
     @property
     def adv_position(self):
-        """Position de tous mes joueurs"""
+        """Position des joueurs adverses"""
         if self.state.nb_players(1) == 1:
             lalya = []
             if self.id_team == 1:
@@ -121,6 +124,11 @@ class Mystate:
                 return lalya
     
     
+    @property
+    def position_defenseur(self):
+        """La position du defenseur sur le terrain"""
+        return self.state.player_state(self.id_team, self.id_player == 0).position
+            
     @property
     def position_attaquant_g(self):
         """La position de l'attaquant gauche sur le terrain"""
@@ -175,15 +183,8 @@ class Mystate:
             dist.append(inter)
         return dist
 
-    @property
-    def distance_myguys(self):
-        """Distance entre le joueur qui a le ballon et ses amis"""
-        dist = []
-        for inter in self.myguys_position:
-            rep = self.position_player.distance(inter)
-            dist.append()
-        return dist
 
+            
     @property
     def proche(self, rang=1):
         """Le joueur le plus proche en fonction du rang ;)"""
@@ -238,14 +239,18 @@ class Mystate:
     def drible(self):
         """Drible le joueur en face to face"""
         adv_pos = self.adv_position
-        if self.distance_player_ball < self.rayon_player_ball:
+        if self.distance_player_ball < self.rayon_player_ball and self.position_ball.x < THREE_QUARTER_WIDTH + 10:
             if self.distance_lalya1 < 20 and self.position_player.x < adv_pos[0].x:
                 if self.position_ball.y > MEDIUM_HEIGHT:
                     return SoccerAction(Vector2D(), (Vector2D(x = adv_pos[0].x + 10, y = adv_pos[0].y + 20) - self.position_ball).norm_max(1))
                 else:
                     return SoccerAction(Vector2D(), (Vector2D(x = adv_pos[0].x + 10, y = adv_pos[0].y - 20) - self.position_ball).norm_max(1))
             return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(1))
-        return self.shoot_ball
+        elif self.position_ball.x < THREE_QUARTER_WIDTH + 10:
+            return self.run_ball_avant_normalize
+        else:
+            return self.shoot_ball
+        
     
     @property
     def shoot_ball(self):
@@ -533,6 +538,27 @@ class Mystate:
                     return self.run_ball_avant_normalize
         return SoccerAction(Vector2D(x = self.position_ball.x, y = MEDIUM_HEIGHT - 10) - self.position_player)
 
+
+
+
+
+######################################################################################################
+#                         Essai gardien et defense pour IA
+######################################################################################################
+ 
+    @property
+    def gardienIA(self):
+        """Gardien de la team4"""
+        if (self.distance_player_ball <= QUARTER_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT + 5) and (self.position_ball.y > QUARTER_HEIGHT - 5) and (self.position_ball.x < QUARTER_WIDTH + 5):
+            return self.run_ball_avant_normalize
+        elif (self.position_ball.y <= GAME_HEIGHT - 49) and (self.position_ball.x > GAME_WIDTH/8.) and (self.position_ball.x < THIRD_WIDTH):
+            return SoccerAction((self.goal_un - Vector2D(x = 0, y = 3)) - self.position_player) 
+        elif (self.position_ball.y >= GAME_HEIGHT - 41) and (self.position_ball.x > GAME_WIDTH/8.) and (self.position_ball.x < THIRD_WIDTH):
+            return SoccerAction((self.goal_un + Vector2D(x = 0, y = 3)) - self.position_player)
+        elif (self.position_ball.x >= THIRD_WIDTH):
+            return SoccerAction(Vector2D(x = GAME_WIDTH/11., y = MEDIUM_HEIGHT) - self.position_player)
+        else:
+            self.drible
 ######################################################################################################
 #                         Fin de mes petites strategies
 ######################################################################################################
@@ -583,6 +609,9 @@ def run_ball_arriere_normalize(mystate):
 
 def dribleur(mystate):
     return mystate.drible
+
+def gardienIA(mystate):
+    return mystate.gardienIA
 
 ######################################################################################################
 #          Miroir: ps un gros problème

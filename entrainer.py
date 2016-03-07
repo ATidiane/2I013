@@ -24,9 +24,10 @@ strat_key.add("b", buteur)
 strat_key.add("r", runv_goal)
 strat_key.add("t", runv_goal_arr)
 strat_key.add("d", dribleur)
+strat_key.add("g", gardienIA)
 t1j1 = Player("t1j1", strat_key)
 dogomet1 = SoccerTeam("dogomet1", [t1j1])
-match_dogomet1 = SoccerMatch(dogomet1, lalya1)
+match_dogomet1 = SoccerMatch(dogomet1, lalya0)
     
 if __name__=="__main__":
     show(match_dogomet1)
