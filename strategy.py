@@ -268,7 +268,7 @@ class Mystate:
             elif self.position_player.x < self.position_ball.x < adv_pos[0].x:
                 return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(1))
             elif self.position_ball.x > self.position_player.x > adv_pos[0].x:
-                return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(4))
+                return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(5))
             return self.fonce_ball
         return self.shoot_ball
 
@@ -277,7 +277,7 @@ class Mystate:
         """Enfin voici un joueur intelligent"""
         adv_pos = self.adv_position
         if self.distance_player_ball < self.rayon_player_ball and self.position_ball.x > THREE_QUARTER_WIDTH - 20 and self.position_player.x < self.position_ball.x < adv_pos[0].x:
-            return self.shoot_ball
+            return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(5))
         elif self.difmh_ball >= -0.2 and self.position_ball.x > QUARTER_WIDTH + 10:
             return SoccerAction((Vector2D(x = adv_pos[0].x - 30, y = self.position_ball.y) - self.position_player)) + self.shoot_ball
         elif self.difmh_ball >= -0.2 and self.position_ball.x < QUARTER_WIDTH + 10:
