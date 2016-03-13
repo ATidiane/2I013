@@ -255,7 +255,7 @@ class Mystate:
         """Drible le joueur en face to face"""
         adv_pos = self.adv_position
         if self.distance_player_ball < self.rayon_player_ball and self.position_ball.x < THREE_QUARTER_WIDTH + 10:
-            if self.distance_lalya1 < 60  and self.position_ball.x < self.position_player.x < adv_pos[0].x:
+            if self.distance_lalya1 < 50  and self.position_ball.x < self.position_player.x < adv_pos[0].x:
                 if self.position_ball.y > MEDIUM_HEIGHT:
                     return SoccerAction((self.position_ball - self.position_player), (Vector2D(x = adv_pos[0].x + 15, y = adv_pos[0].y + 30) - self.position_ball).norm_max(1))
                 else:
@@ -411,7 +411,7 @@ class Mystate:
 ######################################################################################################
 
     @property
-    def more_better_(self):
+    def more_better(self):
         """Joueur de la team1"""
         if (self.position_ball.x == MEDIUM_WIDTH) and (self.position_ball.y == MEDIUM_HEIGHT):
             if self.distance_player_ball < self.rayon_player_ball:
@@ -476,10 +476,6 @@ class Mystate:
                 return self.keeper_shoot_g
         elif (self.distance_gardien_ball < self.distance_player_ball) and (self.position_ball.x < QUARTER_WIDTH):
             return self.shoot_ball
-        #elif (self.position_ball.x > MEDIUM_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT and self.position_ball.y > QUARTER_HEIGHT):
-        #    return SoccerAction(Vector2D(x = QUARTER_WIDTH - 10, y = self.position_ball.y) - self.position_player)
-        #elif (self.position_ball.x > MEDIUM_WIDTH - 10) and (self.position_ball.y > THREE_QUARTER_HEIGHT or self.position_ball.y < QUARTER_HEIGHT):
-        #    return SoccerAction(Vector2D(x = QUARTER_WIDTH - 10, y = MEDIUM_HEIGHT) - self.position_player)
         elif (self.position_ball.x <= MEDIUM_WIDTH - 10) and (self.position_ball.x >= QUARTER_WIDTH + 10):
             return SoccerAction(Vector2D(x = QUARTER_WIDTH - 25, y = MEDIUM_HEIGHT) - self.position_player)
         else:
