@@ -180,6 +180,7 @@ class Mystate:
         #Retourne la position
         return pos
 
+
     def proche_adv(self, rang=1):
         """l'adversaire le plus proche en fonction du rang ;)"""
         dist_pos = {}
@@ -197,6 +198,48 @@ class Mystate:
         pos = dist_pos.get(lalya[rang-1])
         #Retourne la position
         return pos
+
+    def tic_tac(self, rang=1):
+        """Retourne la positon de mon joueur le plus proche du goal adverse, selon le rang"""
+        dist_pos = {}
+        lalya = []
+        monrg = self.myguys_position
+        for i in monrg:
+            d = i.distance(self.goal_deux)
+            dist_pos[d] = i
+        for i in dist_pos.keys():
+            lalya.append(i)
+        lalya.sort()
+        pos = dist_pos.get(lalya[rang-1])
+        if pos != self.position_player:
+            return pos
+        #Si c'est lui le plus proche, retourne sa position.
+        return self.position_player
+
+    def proche_ball(self, qui=1, rang=1):
+        """Retourne la position du joueur le plus proche de la ball, selon le rang
+        Si qui == 1 alors je veux la position de MON joueur, si qui == 2 alors,
+        renvoie la position du joueur adverse, si qui == "autre chose", alors exit"""
+        dist_pos = {}
+        lalya = []
+        #Si qui == 1 alors je veux appliquer la fonction sur mes joueurs
+        if qui == 1:
+            monrg = self.myguys_position
+        #Si qui == 2 alors je veux appliquer la fonction sur les joueurs adverses
+        elif qui == 2:
+            monrg = self.adv_position
+        #Sinon si qui == "autre chose" exit()
+        else:
+            exit()
+        for i in monrg:
+            d = i.distance(self.position_ball)
+            dist_pos[d] = i
+        for i in dist_pos.keys():
+            lalya.append(i)
+        lalya.sort()
+        pos = dist_pos.get(lalya[rang-1])
+        return pos
+
 
 #####################################################################################
 #Tout ce qui retourne des distances
@@ -300,6 +343,12 @@ class Mystate:
         """Passe la ball au joueur le plus proche"""
         if self.distance_player_ball < self.rayon_player_ball:
             return SoccerAction(Vector2D(), (self.proche(qui) - self.position_ball).norm_max(5))
+        return self.fonce_ball
+    
+    def pass_proche_goal_adv(self, qui=1):
+        """Donne la ball au joueur le plus proche du goal adverse"""
+        if self.distance_player_ball < self.rayon_player_ball:
+            return SoccerAction(Vector2D(), (Vector2D(x = self.tic_tac(qui).x + 10, y = self.tic_tac(qui).y) - self.position_ball).norm_max(2.5))
         return self.fonce_ball
     
     @property
@@ -460,13 +509,14 @@ class Mystate:
             return SoccerAction(Vector2D(x = GAME_WIDTH/11., y = MEDIUM_HEIGHT) - self.position_player) + self.shoot_ball
         else:
             return SoccerAction(Vector2D(x = 1, y = MEDIUM_HEIGHT) - self.position_player) + self.shoot_ball
+        return self.pass_proche(3)
     
     @property
     def defense(self):
         """Defenseur de la team4"""
-        if (self.position_ball.x <= MEDIUM_WIDTH + 10) and (self.position_ball.x > QUARTER_WIDTH):
-            return self.pass_proche(2)
-        elif (self.position_ball.x <= QUARTER_WIDTH):
+        if (self.position_ball.x <= MEDIUM_WIDTH + 10) and (self.position_ball.x > QUARTER_WIDTH + 20):
+            return self.pass_proche(1)
+        elif (self.position_ball.x <= QUARTER_WIDTH + 20):
             return self.pass_proche(3)
         elif (self.position_ball.x - self.position_player.x >= 50) and (self.position_ball.x >= MEDIUM_WIDTH + 10):
             return SoccerAction(Vector2D(x = self.position_ball.x - 55, y = self.position_ball.y) - self.position_player)
@@ -479,7 +529,7 @@ class Mystate:
         """Attaquant elié gauche;) je pense"""
         if (self.position_ball.y > MEDIUM_HEIGHT):
             if (self.position_ball.x <= MEDIUM_WIDTH + 5):
-                if (self.distance_defenseur_ball <= QUARTER_WIDTH - 25) or (self.distance_gardien_ball <= QUARTER_WIDTH - 15):
+                if (self.distance_defenseur_ball <= 10) or (self.distance_gardien_ball <= QUARTER_WIDTH - 15):
                     if (self.distance_player_ball < self.rayon_player_ball):
                         return self.passe_g_normalize
                     else:
@@ -492,7 +542,7 @@ class Mystate:
                 if (self.position_ball.x > THREE_QUARTER_WIDTH):
                     return self.shoot_ball_smart
                 else:
-                    return self.run_ball_avant_normalize
+                    return self.pass_proche_goal_adv()
         return SoccerAction(Vector2D(x = self.position_ball.x, y = MEDIUM_HEIGHT + 10) - self.position_player)
         
     @property
@@ -513,7 +563,7 @@ class Mystate:
                 if (self.position_ball.x > THREE_QUARTER_WIDTH):
                     return self.shoot_ball_smart
                 else:
-                    return self.run_ball_avant_normalize
+                    return self.pass_proche_goal_adv()
         return SoccerAction(Vector2D(x = self.position_ball.x, y = MEDIUM_HEIGHT - 10) - self.position_player)
 
 ######################################################################################################
