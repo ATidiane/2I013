@@ -276,10 +276,10 @@ class Mystate:
     def player_team1(self):
         """Enfin voici un joueur intelligent"""
         adv_pos = self.adv_position
-        if self.difmh_ball >= -2 and self.position_ball.x > QUARTER_WIDTH + 10:
-            return SoccerAction((Vector2D(x = self.position_ball.x - 20, y = self.position_ball.y) - self.position_player))
-        elif self.difmh_ball >= -2 and self.position_ball.x < QUARTER_WIDTH + 10:
-            return SoccerAction(Vector2D(x = 1, y = MEDIUM_HEIGHT) - self.position_player)
+        if self.difmh_ball >= -0.2 and self.position_ball.x > QUARTER_WIDTH + 10:
+            return SoccerAction((Vector2D(x = adv_pos[0].x - 30, y = self.position_ball.y) - self.position_player))
+        elif self.difmh_ball >= -0.2 and self.position_ball.x < QUARTER_WIDTH + 10:
+            return SoccerAction(Vector2D(x = 1, y = MEDIUM_HEIGHT) - self.position_player) + self.shoot_ball
         elif self.position_ball.x < self.position_player.x < adv_pos[0].x and self.distance_player_ball < self.rayon_player_ball:
             if self.position_player.y > adv_pos[0].y:
                 return SoccerAction((self.position_ball - self.position_player), Vector2D(x = adv_pos[0].x, y = self.position_player.y + (self.position_player.y - adv_pos[0].y + 5)).norm_max(1)) #+ self.run_ball_avant_normalize
