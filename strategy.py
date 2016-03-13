@@ -255,7 +255,7 @@ class Mystate:
         """Drible le joueur en face to face"""
         adv_pos = self.adv_position
         if self.distance_player_ball < self.rayon_player_ball and self.position_ball.x < THREE_QUARTER_WIDTH + 10:
-            if self.distance_lalya1 < 50  and self.position_ball.x < self.position_player.x < adv_pos[0].x:
+            if self.distance_lalya1 < 45  and self.position_ball.x < self.position_player.x < adv_pos[0].x:
                 if self.position_ball.y > MEDIUM_HEIGHT:
                     return SoccerAction((self.position_ball - self.position_player), (Vector2D(x = adv_pos[0].x + 15, y = adv_pos[0].y + 30) - self.position_ball).norm_max(1))
                 else:
@@ -267,22 +267,24 @@ class Mystate:
                     return SoccerAction((self.position_ball - self.position_player), (Vector2D(x = adv_pos[0].x + 5, y = adv_pos[0].y - 30) - self.position_ball).norm_max(1))
             elif self.position_player.x < self.position_ball.x < adv_pos[0].x:
                 return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(1))
-            return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(3))
+            elif self.position_ball.x > self.position_player.x > adv_pos[0].x:
+                return SoccerAction((self.position_ball - self.position_player), (self.goal_deux - self.position_ball).norm_max(4))
+            return self.fonce_ball
         return self.shoot_ball
 
     @property
     def player_team1(self):
         """Enfin voici un joueur intelligent"""
         adv_pos = self.adv_position
-        if self.difmh_ball >= -2 and self.position_ball.x > QUARTER_WIDTH - 10:
+        if self.difmh_ball >= -2 and self.position_ball.x > QUARTER_WIDTH + 10:
             return SoccerAction((Vector2D(x = self.position_ball.x - 20, y = self.position_ball.y) - self.position_player))
-        elif self.difmh_ball >= -2 and self.position_ball.x < QUARTER_WIDTH - 10:
+        elif self.difmh_ball >= -2 and self.position_ball.x < QUARTER_WIDTH + 10:
             return SoccerAction(Vector2D(x = 1, y = MEDIUM_HEIGHT) - self.position_player)
-        elif self.position_ball.x < self.position_player.x < adv_pos[0].x:
+        elif self.position_ball.x < self.position_player.x < adv_pos[0].x and self.distance_player_ball < self.rayon_player_ball:
             if self.position_player.y > adv_pos[0].y:
-                return SoccerAction((self.position_ball - self.position_player), Vector2D(x = adv_pos[0].x, y = self.position_player.y + (self.position_player.y - adv_pos[0].y) + 2).norm_max(1)) + self.run_ball_avant_normalize
+                return SoccerAction((self.position_ball - self.position_player), Vector2D(x = adv_pos[0].x, y = self.position_player.y + (self.position_player.y - adv_pos[0].y + 5)).norm_max(1)) #+ self.run_ball_avant_normalize
             elif self.position_ball.y < adv_pos[0].y:
-                return SoccerAction((self.position_ball - self.position_player), Vector2D(x = adv_pos[0].x, y = self.position_player.y - (adv_pos[0].y + self.position_player.y) + 2).norm_max(1)) + self.run_ball_avant_normalize
+                return SoccerAction((self.position_ball - self.position_player), Vector2D(x = adv_pos[0].x, y = self.position_player.y - (adv_pos[0].y + self.position_player.y + 5)).norm_max(1)) #+ self.run_ball_avant_normalize
         return self.drible
         
     
