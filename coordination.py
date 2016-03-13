@@ -24,7 +24,7 @@ class AllStrategy(BaseStrategy):
 
 passeur = AllStrategy(strategy.essai)
 z = AllStrategy(strategy.rien)
-
+more_better = AllStrategy(strategy.more_better)
 player_team1 = AllStrategy(strategy.player_team1)
 player_team2 = AllStrategy(strategy.player_team2)
 player_team41 = AllStrategy(strategy.player_team41)

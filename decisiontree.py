@@ -16,6 +16,7 @@ def gen_features(state,id_team,id_player):
     mpos = state.player_state(id_team,id_player).position
     myg = Vector2D((id_team-1)*settings.GAME_WIDTH,settings.GAME_HEIGHT/2.)
     hisg = Vector2D((2-id_team)*settings.GAME_WIDTH,settings.GAME_HEIGHT/2.)
+    
     return [bpos.distance(mpos),bpos.distance(myg),bpos.distance(hisg)]
 #Nom des features (optionel)
 gen_features.names = ["ball_dist","mygoal_dist","hisgoal_dist"]

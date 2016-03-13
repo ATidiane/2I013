@@ -3,12 +3,12 @@ from coordination import *
 from decisiontree import gen_features, DTreeStrategy
 from myIA import treeStrat
 
-t0 = Player("t0", dribleur)
-t1 = Player("t1", passeur)
+t0 = Player("t0", more_better)
+t1 = Player("t1", dribleur)
 t2 = Player("t2", z)
 t3 = Player("t3", z)
-lalya0 = SoccerTeam("dribleur", [t0])
-lalya0bis = SoccerTeam("rien", [t0, t0])
+lalya0 = SoccerTeam("more_better", [t0])
+lalya0bis = SoccerTeam("dribleur", [t1])
 
 
 t1j1 = Player("t1j1", player_team1)
