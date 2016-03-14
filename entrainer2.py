@@ -13,12 +13,12 @@ from team import *
 import sys
 
 
-### Entrainer un arbre de la team1IA 
+### Entrainer un arbre de la team2IA
 
 prefix = "tree"
 if len(sys.argv)>1:
     prefix = sys.argv[1]
-strat_key = KeyboardStrategy(fn="monfichier.exp") #fn veut dire filename
+strat_key = KeyboardStrategy(fn="monfichier2.exp") #fn veut dire filename
 strat_key.add("f", fonceur_shooteur)
 strat_key.add("b", buteur)
 strat_key.add("r", runv_goal)
@@ -26,12 +26,13 @@ strat_key.add("t", runv_goal_arr)
 strat_key.add("d", dribleur)
 strat_key.add("g", gardienIA)
 
-#Joueur de la team1IA
-t1j1 = Player("t1j1", strat_key)
-dogomet1 = SoccerTeam("dogomet1", [t1j1])
 
-match_dogomet1 = SoccerMatch(dogomet1, lalya0)
+#Les deux joueurs de la team2IA
+t2j1 = Player("t2j1", strat_key)
+t2j2 = Player("t2j2", strat_key)
+dogomet2 = SoccerTeam("dogomet2", [t2j1], [t2j2])
 
+match_dogomet2 = SoccerMatch(dogomet2, lalya2)
     
 if __name__=="__main__":
-    show(match_dogomet1)
+    show(match_dogomet2)

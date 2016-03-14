@@ -72,7 +72,7 @@ class DTreeStrategy(BaseStrategy):
 
 
 if __name__=="__main__":
-    prefix = "./monfichier"
+    prefix = "./monfichier2"
     if len(sys.argv)>1:
         prefix = sys.argv[1]
     ## constitution de la base d'entrainement et des labels

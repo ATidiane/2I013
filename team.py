@@ -21,8 +21,8 @@ t4j2 = Player("t4j2", player_team41)
 t4j3 = Player("t4j3", gardien_team4)
 t4j4 = Player("t4j4", player_team42)
 
-lalya0 = SoccerTeam("more_better", [moi, moi])
-lalya0bis = SoccerTeam("dribleur", [t2, moi, moi, moi])
+lalya0 = SoccerTeam("more_better", [t1])
+lalya0bis = SoccerTeam("dribleur", [moi])
 
 lalya1 = SoccerTeam("lalya1", [t1j1])
 lalya1bis = SoccerTeam("lalya1bis", [moi])

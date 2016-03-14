@@ -481,11 +481,11 @@ class Mystate:
         """Gardien de la team2"""
         if (self.distance_gardien_ball <= QUARTER_WIDTH) and (self.position_ball.y < THREE_QUARTER_HEIGHT + 5) and (self.position_ball.y > QUARTER_HEIGHT - 5): 
             if (self.position_ball.y >= 46):
-                return self.keeper_shoot_d
+                return self.pass_proche()
             elif (self.position_ball.y < 46):
-                return self.keeper_shoot_g
+                return self.pass_proche()
         elif (self.distance_gardien_ball < self.distance_player_ball) and (self.position_ball.x < QUARTER_WIDTH):
-            return self.shoot_ball
+            return self.pass_proche()
         elif (self.position_ball.x <= MEDIUM_WIDTH - 10) and (self.position_ball.x >= QUARTER_WIDTH + 10):
             return SoccerAction(Vector2D(x = QUARTER_WIDTH - 25, y = MEDIUM_HEIGHT) - self.position_player)
         else:
