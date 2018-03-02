@@ -536,7 +536,7 @@ class MatchWindow(pyglet.window.Window):
         self._rebuild_panel = True
         self._pnext = False
 
-        
+
 def pyg_start():
     pyglet.app.run()
 
